@@ -51,36 +51,32 @@ function App() {
     setOperator("");
   };
   const handleCalculation = (key) => {
-    if (data === "0" || data === 0) {
-      setOperator(key);
-    } else {
-      let currentValue = parseFloat(data);
-      let previousValue = parseFloat(previous);
-      setData("0");
+    let currentValue = parseFloat(data);
+    let previousValue = parseFloat(previous);
+    setData("0");
 
-      switch (key) {
-        case "+":
-          setPrevious(currentValue + previousValue);
+    switch (key) {
+      case "+":
+        setPrevious(currentValue + previousValue);
 
-          break;
-        case "-":
-          setPrevious(previousValue - currentValue);
+        break;
+      case "-":
+        setPrevious(previousValue - currentValue);
 
-          break;
-        case "*":
-          setPrevious(previousValue * currentValue);
+        break;
+      case "*":
+        setPrevious(previousValue * currentValue);
 
-          break;
-        case "/":
-          (currentValue && previousValue) !== 0
-            ? setPrevious(previousValue / currentValue)
-            : setPrevious("0");
+        break;
+      case "/":
+        (currentValue && previousValue) !== 0
+          ? setPrevious(previousValue / currentValue)
+          : setPrevious("0");
 
-          break;
+        break;
 
-        default:
-          break;
-      }
+      default:
+        break;
     }
   };
   const handleOpertion = (e) => {
@@ -91,11 +87,15 @@ function App() {
     if (previous === "") {
       setPrevious(data);
       setData(0);
+    }
+    if (data === "0" || data === 0) {
+      setOperator(operation);
     } else {
       handleCalculation(operator);
     }
   };
   const handleInputData = (e) => {
+    // console.log(e.key, e.keyCode);
     e.target.value = e.key;
     if (e.keyCode === 8) {
       handleDelete();
@@ -108,14 +108,8 @@ function App() {
     ) {
       handleKeyData(e);
     }
-    if (e.keyCode === 187 || e.keyCode === 222 || e.keyCode === 13)
-      handleSubmit();
-    if (
-      e.keyCode === 106 ||
-      e.keyCode === 107 ||
-      e.keyCode === 109 ||
-      e.keyCode === 111
-    ) {
+    if (e.key === "=" || e.key === "Enter") handleSubmit();
+    if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/") {
       handleOpertion(e);
     }
   };
@@ -128,30 +122,41 @@ function App() {
   }, []);
   return (
     <div className="App">
-      <div className="calWrapper">
-        <div className="calHeader">
-          <h3>Calc</h3>
-        </div>
-        <div className="calInput">
-          <div className="previousValue">
-            {previous}
-            {operator}
+      <div className="calculator">
+        <div className="calWrapper">
+          <div className="header">
+            <h3>Calc</h3>
+            <div className="color-picker">
+              <div id="white"></div>
+              <div id="aqua"></div>
+
+              <div id="blue"></div>
+              <div id="black"></div>
+            </div>
           </div>
-          <div
-            className="currentValue"
-            onKeyDown={handleInputData}
-            tabIndex={0}
-            ref={ref}
-          >
-            {data}
+          <div className="display">
+            <div className="previous">
+              {previous}
+              {operator}
+            </div>
+            <div
+              onKeyDown={handleInputData}
+              tabIndex={0}
+              ref={ref}
+              className="current"
+            >
+              {data}
+            </div>
           </div>
-        </div>
-        <div className="calKeys">
-          <button onClick={handleReset}>AC</button>
-          <button onClick={handleKeyData} value=".">
-            .
+
+          <button onClick={handleReset} className="span-two">
+            AC
           </button>
+
           <button onClick={handleDelete}>DEL</button>
+          <button onClick={handleOpertion} value="+">
+            +
+          </button>
           <button onClick={handleKeyData} value="7">
             7
           </button>
@@ -161,8 +166,8 @@ function App() {
           <button onClick={handleKeyData} value="9">
             9
           </button>
-          <button onClick={handleOpertion} value="+">
-            +
+          <button onClick={handleOpertion} value="-">
+            -
           </button>
           <button onClick={handleKeyData} value="4">
             4
@@ -173,8 +178,8 @@ function App() {
           <button onClick={handleKeyData} value="6">
             6
           </button>
-          <button onClick={handleOpertion} value="-">
-            -
+          <button onClick={handleOpertion} value="*">
+            *
           </button>
 
           <button onClick={handleKeyData} value="1">
@@ -186,8 +191,16 @@ function App() {
           <button onClick={handleKeyData} value="3">
             3
           </button>
-
-          <button value="=" onClick={handleSubmit}>
+          <button onClick={handleOpertion} value="/">
+            /
+          </button>
+          <button onClick={handleKeyData} value=".">
+            .
+          </button>
+          <button onClick={handleKeyData} value="0">
+            0
+          </button>
+          <button value="=" onClick={handleSubmit} className="span-two">
             =
           </button>
         </div>
